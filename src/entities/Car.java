@@ -3,9 +3,7 @@ package entities;
 import java.util.Random;
 
 public class Car {
-
 	private String plate;
-	private boolean parked;
 	private String letters = "";
 	private String numbers = "";
 
@@ -31,13 +29,5 @@ public class Car {
 
 	public String getPlate() {
 		return plate;
-	}
-
-	public boolean isParked() {
-		return parked;
-	}
-
-	public void setParked(boolean parked) {
-		this.parked = parked;
 	}
 }
