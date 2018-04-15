@@ -3,11 +3,13 @@ package entities;
 import java.util.Random;
 
 public class Car {
-
 	private String plate;
-	private boolean parked;
 	private String letters = "";
 	private String numbers = "";
+
+	public Car() {
+		this.plate = String.format("%s-%s", getLetters(3), getNumbers(4));
+	}
 
 	private String getLetters(int quantity){
 		Random rd = new Random();
@@ -25,19 +27,7 @@ public class Car {
 		return numbers + number + getNumbers(quantity-1);
 	}
 
-	public Car() {
-		this.plate = String.format("%s-%s", getLetters(3), getNumbers(4));
-	}
-
 	public String getPlate() {
 		return plate;
-	}
-
-	public boolean isParked() {
-		return parked;
-	}
-
-	public void setParked(boolean parked) {
-		this.parked = parked;
 	}
 }
