@@ -8,20 +8,14 @@ public class Parking {
 	private String[] parkingSpace;
 
 	public Parking(){
-		parkingSpace = new String[rd.nextInt(100)];
+		parkingSpace = new String[rd.nextInt(51)+10];
 	}
 
-	synchronized boolean isParked(String carPlate){
-		if (parked.contains(carPlate)) {
-			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-			return true;
-		} else {
-			Thread.currentThread().setPriority(Thread.NORM_PRIORITY);
-			return false;
-		}
+	boolean isParked(String carPlate){
+		return parked.contains(carPlate) ? true : false;
 	}
 
-	synchronized void receivingCar(String carPlate) {
+	void receivingCar(String carPlate) {
 		if (isParked(carPlate)) {
 			gettingCar(carPlate);
 		} else {
@@ -29,18 +23,19 @@ public class Parking {
 		}
 	}
 
-	synchronized void parkingCar(String carPlate) {
+	void parkingCar(String carPlate) {
 		boolean notFound = true;
+		int size = parkingSpace.length;
 
 		do {
-			int index = rd.nextInt(parkingSpace.length);
+			int index = rd.nextInt(size);
 
-			if (parkingSpace[index].equals("")) {
+			if (parkingSpace[index] == null) {
 				parkingSpace[index] = carPlate;
 				parked.add(carPlate);
 				notFound = false;
 				System.out.println(String.format(
-						"%s foi estacionar o carro %s na vaga %s.",
+						"%s está estacionando o carro [%s] na vaga %s.\n",
 						Thread.currentThread().getName(),
 						carPlate, index));
 				try {
@@ -52,24 +47,27 @@ public class Parking {
 		} while (notFound);
 	}
 
-	synchronized void gettingCar(String carPlate) {
+	void gettingCar(String carPlate) {
 		boolean notFound = true;
+		int size = parkingSpace.length;
 
 		do {
-			int index = rd.nextInt(parkingSpace.length);
+			int index = rd.nextInt(size);
 
-			if (parkingSpace[index].equals(carPlate)) {
-				parkingSpace[index] = "";
-				parked.remove(carPlate);
-				notFound = false;
-				System.out.println(String.format(
-						"%s foi buscar o carro %s na vaga %s.",
-						Thread.currentThread().getName(),
-						carPlate, index));
-				try {
-					Thread.sleep(index * 1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+			if (parkingSpace[index] != null) {
+				if (parkingSpace[index].equals(carPlate)) {
+					parkingSpace[index] = null;
+					parked.remove(carPlate);
+					notFound = false;
+					System.out.println(String.format(
+							"%s está buscando o carro [%s] na vaga %s.\n",
+							Thread.currentThread().getName(),
+							carPlate, index));
+					try {
+						Thread.sleep(index * 1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		} while (notFound);

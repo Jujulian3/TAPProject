@@ -7,6 +7,10 @@ public class Car {
 	private String letters = "";
 	private String numbers = "";
 
+	public Car() {
+		this.plate = String.format("%s-%s", getLetters(3), getNumbers(4));
+	}
+
 	private String getLetters(int quantity){
 		Random rd = new Random();
 		char letter = (char)(rd.nextInt(26)+65);
@@ -21,10 +25,6 @@ public class Car {
 
 		if (quantity == 1) { return numbers = numbers + number;	}
 		return numbers + number + getNumbers(quantity-1);
-	}
-
-	public Car() {
-		this.plate = String.format("%s-%s", getLetters(3), getNumbers(4));
 	}
 
 	public String getPlate() {
