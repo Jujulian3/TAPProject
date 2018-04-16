@@ -27,29 +27,44 @@ public class ThreadDriver implements Runnable {
 		thread.start();
 	}
 
-	public void run() {
+	synchronized public void run() {
 
-		do {
+		System.out.println(String.format("%s iniciou seu trabalho.\n", name));
+
+		do {			
 			if (returnCars.size() > 0 ) {
 				car = returnCars.get(0);
 				returnCars.remove(0);
 				parkedCars.remove(car);
-			} else {
+			} else if (cars.size() > 0) {
 				car = cars.get(0);
 				cars.remove(0);
 				parkedCars.add(car);
+			} else {
+				car = parkedCars.size() > 0 ? parkedCars.get(0) : new Car();
 			}
+
+			parking.receivingCar(car);
 
 			canReturn = rd.nextInt(5);
-			if (canReturn == 0 && parkedCars.size() > 2) {
+			if (canReturn == 0 && parkedCars.size() > 4) {
 				returnCars.add(parkedCars.get(rd.nextInt(parkedCars.size())));
 			}
-
-			System.out.println(String.format("%s está atendendo o Cliente do carro [%s]", name, car.getPlate()));
-			parking.receivingCar(car.getPlate());
 
 		} while (!(cars.isEmpty() && returnCars.isEmpty()));
 
 		System.out.println(String.format("%s terminou seu trabalho.\n", name));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Car getCar() {
+		return car;
+	}
+
+	public boolean stop() {
+		return !(cars.isEmpty() && returnCars.isEmpty());
 	}
 }
